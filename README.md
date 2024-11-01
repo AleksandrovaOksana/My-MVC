@@ -1,2 +1,0 @@
-# My-MVC
-My MVC
