@@ -15,14 +15,16 @@
                                 <a href="post?id=<?= $post['id'] ?>">Go somewhere</a>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+
+                    <?php  endforeach; ?>
 
                 </div>
-        <?php require VIEWS . '/incs/sidebar.php'; ?>
+        <?php  require VIEWS . '/incs/sidebar.php'; ?>
 
             </div>
         </div>
 
     </main>
 
-    <?php require VIEWS . '/incs/footer.php'; ?>
+    <?php  require VIEWS . '/incs/footer.php';  ?>
+

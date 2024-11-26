@@ -9,13 +9,13 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
 
-                    <?= $post ?>
+                    <h1><?= $post['title']?></h1>
+                    <?= $post ['content']?>
 
                 </div>
 
-                <?php require VIEWS . '/incs/sidebar.php'; ?>
             </div>
         </div>
 

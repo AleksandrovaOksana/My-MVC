@@ -19,3 +19,20 @@ function abort($code=404)
     die;
 
 }
+
+function load($fillable = [])
+{
+    $data = [];
+    foreach ($_POST as $k => $v) {
+        if (in_array($k, $fillable)) {
+            $data[$k] = $v;
+        }
+    }
+    return $data;
+}
+
+function old($fieldname)
+{
+    return isset($_POST[$fieldname]) ? $_POST[$fieldname] : '';
+}
+
