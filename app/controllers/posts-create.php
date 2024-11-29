@@ -1,4 +1,5 @@
 <?php
+require_once CORE. '/classes/Validator.php';
 /**
  * @var Db $db
  */
@@ -9,19 +10,48 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $data=load($fillable);
 
     //validations
-    $errors=[];
-    if(empty(trim($data['title']))){
-        $errors['title']="Title is required";
-    }
-    if(empty(trim($data['content']))){
-        $errors['content']="Content is required";
-    }
-    if(empty(trim($data['excerpt']))){
-        $errors['excerpt']="Excerpt is required";
-    }
+    $validator = new Validator();
+    $validation=$validator->validate($data, [
+        'title' => [
+            'required' => true,
+            'min' => 5,
+            'max' => 190,
+        ],
+        'excerpt' => [
+            'required' => true,
+            'min' => 10,
+            'max' => 190,
+        ],
+        'content' => [
+            'required' => true,
+            'min' => 100,
+        ],
+    ]);
+
+    if($validation->hasErrors()){
+    } else {
+        echo 'SUCCESS';
+    }        print_arr($validation->getErrors());
+
+    die;
+
+//    if(empty($data['title'])){
+//        $errors['title']="Title is required";
+//    }
+//    if(empty($data['content'])){
+//        $errors['content']="Content is required";
+//    }
+//    if(empty($data['excerpt'])){
+//        $errors['excerpt']="Excerpt is required";
+//    }
 
     if(empty($errors)){
-        $db->query("INSERT INTO posts (`title`, `content`, `excerpt`) VALUES (?, ?, ?)", [$_POST['title'], $_POST['content'], $_POST['excerpt']]);
+        if($db->query("INSERT INTO posts (`title`, `content`, `excerpt`) VALUES (:title, :content, :excerpt)", $data)){
+            echo 'OK';
+        } else {
+            echo 'Db ERROR';
+        }
+//        redirect('/posts/create');
     }
 }
 
