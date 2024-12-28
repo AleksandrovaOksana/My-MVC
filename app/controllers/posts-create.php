@@ -1,7 +1,8 @@
 <?php
 require_once CORE. '/classes/Validator.php';
+use myfrm\Validator;
 /**
- * @var Db $db
+ * @var \myfrm\Db $db
  */
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -9,48 +10,95 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     $fillable=['title', 'content', 'excerpt'];
     $data=load($fillable);
 
+    /**
+     * [
+     * 'title'=> 'Explicado Enim corp',
+     * 'content'=> 'Expl',
+     * 'excerpt'=> 'Explicado Enim corp',
+     * 'email'=>'Expl@mail.ru',
+     * ]
+    */
+
     //validations
     $validator = new Validator();
-    $validation=$validator->validate($data, [
-        'title' => [
-            'required' => true,
-            'min' => 5,
-            'max' => 190,
-        ],
-        'excerpt' => [
-            'required' => true,
-            'min' => 10,
-            'max' => 190,
-        ],
-        'content' => [
-            'required' => true,
-            'min' => 100,
-        ],
-    ]);
+//    $validation=$validator->validate(
+//        [
+//            'title'=> 'Explicado Enim corp',
+//            'content'=> 'Expl',
+//            'excerpt'=> 'Explicado Enim corp',
+//            'email'=>'Expl@mail.ru',
+//            'password'=>'123456',
+//            'repassword'=>'123456',
+//        ],
+//        [
+//        'title' => [
+//            'required' => true,
+//            'min' => 5,
+//            'max' => 190,
+//        ],
+//        'excerpt' => [
+//            'required' => true,
+//            'min' => 10,
+//            'max' => 190,
+//        ],
+//        'content' => [
+//            'required' => true,
+//            'min' => 100,
+//        ],
+//        'email' => [
+//            'email' => true,
+//        ],
+//            'password' => [
+//                'required' => true,
+//                'min' => 6,
+//            ],
+//            'repassword' => [
+//                'math' => 'password',
+//            ]
+//
+//    ]);
+//
+//    print_arr($validation->getErrors());
+//    die;
 
-    if($validation->hasErrors()){
-    } else {
-        echo 'SUCCESS';
-    }        print_arr($validation->getErrors());
+    $validation=$validator->validate(
+        $data,
+        [
+            'title' => [
+                'required' => true,
+                'min' => 5,
+                'max' => 190,
+            ],
+            'excerpt' => [
+                'required' => true,
+                'min' => 10,
+                'max' => 190,
+            ],
+            'content' => [
+                'required' => true,
+                'min' => 100,
+            ],
+            'email' => [
+                'email' => true,
+            ],
+            'password' => [
+                'required' => true,
+                'min' => 6,
+            ],
+            'repassword' => [
+                'math' => 'password',
+            ]
 
-    die;
+        ]);
 
-//    if(empty($data['title'])){
-//        $errors['title']="Title is required";
-//    }
-//    if(empty($data['content'])){
-//        $errors['content']="Content is required";
-//    }
-//    if(empty($data['excerpt'])){
-//        $errors['excerpt']="Excerpt is required";
-//    }
 
-    if(empty($errors)){
+    if(!$validation->hasErrors()){
         if($db->query("INSERT INTO posts (`title`, `content`, `excerpt`) VALUES (:title, :content, :excerpt)", $data)){
-            echo 'OK';
+            $_SESSION['success']= 'OK';
         } else {
-            echo 'Db ERROR';
-        }
+            $_SESSION['error'] = 'DB Error';
+    }
+        redirect();
 //        redirect('/posts/create');
     }
 }

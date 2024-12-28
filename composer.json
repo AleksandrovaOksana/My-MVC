@@ -1,0 +1,8 @@
+{
+  "autoload": {
+    "psr-4": {
+      "app\\": "public/test/app",
+      "base\\": "public/test/classes/test"
+    }
+  }
+}

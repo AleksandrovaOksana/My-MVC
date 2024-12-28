@@ -50,7 +50,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ${PWD}/mysql:/var/lib/mysql
+      - polygon_db:/var/lib/mysql
     networks:
       - app-network
 
@@ -79,3 +79,5 @@ networks:
 volumes:
   dbdata:
     driver: local
+  polygon_db:
+    external: false
